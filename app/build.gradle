@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.ui"
@@ -85,5 +85,11 @@ dependencies {
     /* Navigation for Screens */
     implementation "androidx.navigation:navigation-compose:2.4.1"
 
+
+    //    Coil  -> https://coil-kt.github.io/coil/ */
+    implementation("io.coil-kt:coil-compose:2.0.0-rc02")
+
+
+    
 
 }

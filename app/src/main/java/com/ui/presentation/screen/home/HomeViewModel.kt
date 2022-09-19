@@ -30,14 +30,14 @@ class HomeViewModel @Inject constructor(
     val uiEvent = _UiEvent.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
+      /*  viewModelScope.launch {
             state = emptyList()
             getPostsUseCase().onSuccess {
                 state = it
             }.onFailure {
                 state = emptyList()
             }
-        }
+        }*/
     }
 
     fun onNavigateDetail(id: Int) {

@@ -7,17 +7,18 @@ import com.ui.data.data.dto.Post
  * @Date: 26/02/22
  */
 
- fun Post.toPostForDomain(): com.ui.domain.data.Post{
+fun Post.toPostForDomain(): com.ui.domain.data.Post {
 
     return com.ui.domain.data.Post(
         body = body,
         id = id,
         title = title,
+        isSaved = false,
         userId = userId,
     )
 }
 
-fun com.ui.domain.data.Post.toPostForApi(): Post{
+fun com.ui.domain.data.Post.toPostForApi(): Post {
     return Post(
         body = body,
         id = id,

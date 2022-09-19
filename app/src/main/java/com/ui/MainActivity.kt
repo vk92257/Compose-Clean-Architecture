@@ -9,13 +9,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key.Companion.Home
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ui.navigation.Route
 import com.ui.navigation.navigate
-import com.ui.presentation.screen.Home
+import com.ui.presentation.screen.home.Home
 import com.ui.presentation.theme.UITheme
 import dagger.hilt.android.AndroidEntryPoint
 
