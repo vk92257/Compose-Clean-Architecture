@@ -7,4 +7,5 @@ package com.ui.navigation
 object Route {
     const val HOME = "home"
     const val DETAILS = "details"
+    const val SAVED = "saved"
 }

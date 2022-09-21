@@ -2,7 +2,10 @@ package com.ui.di
 
 import com.ui.data.data.JsonPlaceholderApi
 import com.ui.data.repository.JsonPlaceholderRepositoryImpl
+import com.ui.data.repository.NewBreezeRepositoryImpl
 import com.ui.domain.repository.JsonPlaceholderRepository
+import com.ui.domain.repository.NewBreezeRepository
+import com.ui.domain.useCases.GetBreakingNewsUseCase
 import com.ui.domain.useCases.GetPostsUseCase
 import dagger.Module
 import dagger.Provides
@@ -53,6 +56,24 @@ object AppModule {
     ): JsonPlaceholderRepository {
         return JsonPlaceholderRepositoryImpl(api)
     }
+
+
+    @Provides
+    @Singleton
+    fun providesNewsBreezeRepository(
+        api: JsonPlaceholderApi
+    ): NewBreezeRepository {
+        return NewBreezeRepositoryImpl(api)
+    }
+
+
+    @Singleton
+    @ViewModelScoped
+    fun provideGetBreakingNewsUseCase(repository: NewBreezeRepository): GetBreakingNewsUseCase {
+        return GetBreakingNewsUseCase(repository)
+
+    }
+
 
     @Singleton
     @ViewModelScoped

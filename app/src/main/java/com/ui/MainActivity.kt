@@ -12,9 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ui.domain.data.Post
 import com.ui.navigation.Route
 import com.ui.navigation.navigate
+import com.ui.presentation.screen.detail.ArticleDetailScreen
 import com.ui.presentation.screen.home.Home
+import com.ui.presentation.screen.saved.SavedArticlesScreen
 import com.ui.presentation.theme.UITheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +40,11 @@ class MainActivity : ComponentActivity() {
                                 Home(navigate = navController::navigate)
                             }
                             composable(Route.DETAILS) {
+                                ArticleDetailScreen(posts = it.arguments?.get("post") as Post)
+                            }
 
+                            composable(Route.SAVED) {
+                                SavedArticlesScreen()
                             }
 
                         }
