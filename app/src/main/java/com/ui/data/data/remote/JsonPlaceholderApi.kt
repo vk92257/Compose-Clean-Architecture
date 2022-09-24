@@ -1,4 +1,4 @@
-package com.ui.data.data
+package com.ui.data.data.remote
 
 import com.ui.data.data.dto.Comment
 import com.ui.data.data.dto.Post

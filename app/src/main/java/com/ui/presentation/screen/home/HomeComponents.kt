@@ -26,7 +26,7 @@ fun HomeHeader(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
 
     ) {
         Icon(
@@ -34,6 +34,26 @@ fun HomeHeader(
             modifier = Modifier.align(
                 alignment = Alignment.CenterStart
             )
+        )
+
+
+        Icon(
+            painter = painterResource(id = R.drawable.ic_saved),
+            modifier = Modifier
+
+                .align(
+                    alignment = Alignment.TopEnd
+                )
+                .size(40.dp)
+                .background(
+                    color = colorResource(id = R.color.green), shape = RoundedCornerShape(5.dp)
+                )
+                .padding(10.dp)
+                .clickable {
+                    onSavedClick()
+                },
+            tint = colorResource(id = R.color.white),
+            contentDescription = "filter"
         )
 
 

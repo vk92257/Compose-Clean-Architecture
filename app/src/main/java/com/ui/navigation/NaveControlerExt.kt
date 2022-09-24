@@ -1,6 +1,7 @@
 package com.ui.navigation
 
 import androidx.navigation.NavController
+import com.ui.util.UiEvent
 
 /**
  * @Author: Vivek

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.ui.R
-import com.ui.domain.data.Post
+import com.ui.data.data.dto.newBreeze.Article
 
 
 @Preview
@@ -77,12 +77,8 @@ fun Toolbar(
 @Composable
 fun ListIte() {
     SavedListItem(
-        Post = Post(
-            body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            id = 1,
-            userId = 2,
-            isSaved = true,
-            title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ",
+        article = Article(
+            id = 0
         )
     )
 }
@@ -90,20 +86,21 @@ fun ListIte() {
 
 @Composable
 fun SavedListItem(
-    Post: Post,
+    article: Article,
     modifier: Modifier = Modifier,
+    onItemClicked: () -> Unit = {}
 ) {
-
 
     Row(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable(onClick = onItemClicked),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current)
-                    .data(data = R.drawable.temp_two)
+                    .data(data = article.urlToImage)
                     .crossfade(true)
                     .placeholder(R.drawable.temp_img)
                     .error(R.drawable.temp_img)
@@ -115,35 +112,39 @@ fun SavedListItem(
                 .background(
                     shape = RoundedCornerShape(25.dp),
                     color = Color.Transparent
-                ).clip(
+                )
+                .clip(
                     shape = RoundedCornerShape(25.dp)
                 )
                 .padding(3.dp)
                 .size(
                     100.dp
                 )
-                .clickable {
-                },
+                .clickable(onClick = onItemClicked),
 
             contentDescription = "back"
         )
 
 
 
-        Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 10.dp)
+                .clickable(onClick = onItemClicked)
+        ) {
             Text(
-                text = Post.title,
+                text = article.title ?: "",
                 style = MaterialTheme.typography.body1,
-                modifier = Modifier,
+                modifier = Modifier.clickable(onClick = onItemClicked),
                 fontWeight = FontWeight.Normal,
                 maxLines = 1,
                 color = colorResource(id = R.color.green)
             )
 
             Text(
-                text = Post.body,
+                text = article.description ?: article.description ?: " ",
                 style = MaterialTheme.typography.body1,
-                modifier = Modifier,
+                modifier = Modifier.clickable(onClick = onItemClicked),
                 fontWeight = FontWeight.Bold,
                 maxLines = 2,
                 color = colorResource(id = R.color.black)
@@ -152,9 +153,9 @@ fun SavedListItem(
 
 
             Text(
-                text = "${Post.time}- James Adam",
+                text = "${article.publishedAt ?: " "}- ${article.author ?: " "}",
                 style = MaterialTheme.typography.caption,
-                modifier = Modifier.padding(vertical = 3.dp),
+                modifier = Modifier.padding(vertical = 3.dp).clickable(onClick = onItemClicked),
                 fontWeight = FontWeight.Normal,
                 maxLines = 1,
                 color = colorResource(id = R.color.black).copy(

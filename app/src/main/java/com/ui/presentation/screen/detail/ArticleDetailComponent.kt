@@ -58,7 +58,7 @@ fun ReporterDetails(
 
             Column {
                 Text(
-                    text = reporterName,
+                    text = reporterName.takeLast(40)?:" ",
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(
                         start = 12.dp,
@@ -69,7 +69,7 @@ fun ReporterDetails(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = mediaGroup,
+                    text = mediaGroup.takeLast(40),
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.padding(
                         start = 12.dp,

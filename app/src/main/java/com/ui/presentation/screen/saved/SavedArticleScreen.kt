@@ -3,6 +3,7 @@ package com.ui.presentation.screen.saved
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -10,20 +11,42 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ui.domain.data.Post
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.ui.data.data.dto.newBreeze.Article
+import com.ui.util.UiEvent
 import com.ui.presentation.screen.home.SearchBar
+import kotlinx.coroutines.flow.collectLatest
 
 
-@Preview
 @Composable
-fun SavedArticlesScreen() {
+fun SavedArticlesScreen(
+    viewModel: SavedViewModel = hiltViewModel(),
+    navigate: (Article) -> Unit,
+    navigateUp: () -> Unit,
+) {
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collectLatest {
+            viewModel.uiEvent.collect {
+                when (it) {
+                    is UiEvent.ShowSnackBar -> {}
+                    is UiEvent.ReadArticleClick -> {
+                        navigate(it.article)
+                    }
+                    is UiEvent.NavigateUp -> {
+                        navigateUp()
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -37,7 +60,8 @@ fun SavedArticlesScreen() {
             modifier = Modifier
                 .padding(
                     horizontal = 30.dp
-                )
+                ),
+            onBackClick = viewModel::onBackClick
         )
 
 
@@ -59,7 +83,7 @@ fun SavedArticlesScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = 30.dp
+                    horizontal = 35.dp
                 ),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -81,13 +105,12 @@ fun SavedArticlesScreen() {
         }
 
         Box(
-
             modifier = Modifier
                 .align(
                     alignment = Alignment.CenterHorizontally
                 )
                 .padding(
-                    30.dp
+                    20.dp
                 )
                 .fillMaxWidth()
                 .shadow(2.dp, RoundedCornerShape(10.dp))
@@ -100,15 +123,12 @@ fun SavedArticlesScreen() {
 
             ) {
             LazyColumn() {
-                items(5) {
+                itemsIndexed(viewModel.state.articles) { index, item ->
                     SavedListItem(
-                        Post = Post(
-                            body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                            id = 1,
-                            userId = 2,
-                            isSaved = true,
-                            title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ",
-                        ),
+                        article = item,
+                        onItemClicked = {
+                            viewModel.onActionPerformed(SavedScreenEvents.OnArticleReadEvent(index))
+                        },
                         modifier = Modifier.padding(
                             top = 25.dp,
                             start = 15.dp,
@@ -124,11 +144,13 @@ fun SavedArticlesScreen() {
                             imageVector = Icons.Default.ArrowDropDown,
                             contentDescription = "Down",
                             tint = colorResource(id = com.ui.R.color.green),
-                            modifier = Modifier.align(
-                                alignment = Alignment.CenterHorizontally
-                            ).size(
-                                60.dp
-                            )
+                            modifier = Modifier
+                                .align(
+                                    alignment = Alignment.CenterHorizontally
+                                )
+                                .size(
+                                    60.dp
+                                )
                         )
                     }
 
@@ -139,4 +161,5 @@ fun SavedArticlesScreen() {
 
 
     }
+
 }

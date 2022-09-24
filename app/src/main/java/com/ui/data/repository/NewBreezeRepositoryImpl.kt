@@ -1,6 +1,6 @@
 package com.ui.data.repository
 
-import com.ui.data.data.JsonPlaceholderApi
+import com.ui.data.data.remote.JsonPlaceholderApi
 import com.ui.data.data.dto.newBreeze.NewBreeze
 import com.ui.domain.repository.NewBreezeRepository
 import javax.inject.Inject

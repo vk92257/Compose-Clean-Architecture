@@ -1,13 +1,12 @@
 package com.ui.data.repository
 
-import com.ui.data.data.JsonPlaceholderApi
+import com.ui.data.data.remote.JsonPlaceholderApi
 import com.ui.data.mappers.toCommentForDomain
 import com.ui.data.mappers.toPostForDomain
 import com.ui.domain.data.Comment
 import com.ui.domain.data.Post
 import com.ui.domain.repository.JsonPlaceholderRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 
 /**

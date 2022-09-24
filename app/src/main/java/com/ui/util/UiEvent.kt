@@ -1,4 +1,6 @@
-package com.ui.navigation
+package com.ui.util
+
+import com.ui.data.data.dto.newBreeze.Article
 
 /**
  * @Author: Vivek
@@ -6,6 +8,7 @@ package com.ui.navigation
  */
 sealed class UiEvent{
     data class Navigate(val route:String): UiEvent()
+    data class ReadArticleClick(val article: Article): UiEvent()
     data class ShowSnackBar(val message: String): UiEvent()
     object NavigateUp : UiEvent()
 }

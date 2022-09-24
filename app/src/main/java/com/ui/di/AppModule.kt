@@ -1,6 +1,6 @@
 package com.ui.di
 
-import com.ui.data.data.JsonPlaceholderApi
+import com.ui.data.data.remote.JsonPlaceholderApi
 import com.ui.data.repository.JsonPlaceholderRepositoryImpl
 import com.ui.data.repository.NewBreezeRepositoryImpl
 import com.ui.domain.repository.JsonPlaceholderRepository
@@ -80,4 +80,6 @@ object AppModule {
     fun provideHomeUseCases(repository: JsonPlaceholderRepository): GetPostsUseCase {
         return GetPostsUseCase(repository)
     }
+
+
 }

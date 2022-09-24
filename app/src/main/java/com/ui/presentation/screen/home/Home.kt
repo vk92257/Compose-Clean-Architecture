@@ -11,14 +11,16 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ui.navigation.UiEvent
+import com.ui.data.data.dto.newBreeze.Article
 import com.ui.presentation.component.Articles
+import com.ui.util.UiEvent
 
 
 @Composable
 
 fun Home(
-    navigate: (UiEvent.Navigate) -> Unit,
+    navigate: (article: Article) -> Unit,
+    navigateScreen: (UiEvent.Navigate) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     LaunchedEffect(key1 = true) {
@@ -26,7 +28,10 @@ fun Home(
             when (it) {
                 is UiEvent.ShowSnackBar -> {}
                 is UiEvent.Navigate -> {
-                    navigate(it)
+                    navigateScreen(it)
+                }
+                is UiEvent.ReadArticleClick -> {
+                    navigate(it.article)
                 }
                 else -> {}
             }
@@ -43,7 +48,10 @@ fun Home(
         Spacer(modifier = Modifier.size(35.dp))
 
         HomeHeader(
-            modifier = Modifier.padding(horizontal = 29.dp)
+            modifier = Modifier.padding(horizontal = 29.dp),
+            onSavedClick = {
+                viewModel.onEvent(HomeScreenEvents.OpenSavedArticleScreen)
+            }
         )
         Spacer(modifier = Modifier.size(20.dp))
         SearchBar(
@@ -51,12 +59,24 @@ fun Home(
 
         )
         LazyColumn(modifier = Modifier.padding(horizontal = 25.dp)) {
-            itemsIndexed(viewModel.state) { index, article ->
+            itemsIndexed(viewModel.state.articles) { index, article ->
                 Articles(
                     article = article,
-                    onArticleClick = {},
-                    onReadClick = {},
-                    onSaveClick = {},
+                    onReadClick = {
+                        viewModel.onEvent(
+                            HomeScreenEvents.OnArticleReadEvent(
+                                articlePosition = index,
+                            )
+                        )
+                    },
+                    onSaveClick = {
+                        viewModel.onEvent(
+                            HomeScreenEvents.OnSaveArticleEvent(
+                                articlePosition = index,
+
+                                )
+                        )
+                    },
                 )
             }
         }
@@ -71,5 +91,5 @@ fun Home(
 @Preview
 @Composable
 fun HomePreview() {
-    Home(navigate = {})
+//    Home(navigate = {})
 }

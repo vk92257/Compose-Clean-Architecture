@@ -1,5 +1,6 @@
 package com.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,7 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ui.domain.data.Post
+import com.ui.common.Constants
+import com.ui.data.data.dto.newBreeze.Article
 import com.ui.navigation.Route
 import com.ui.navigation.navigate
 import com.ui.presentation.screen.detail.ArticleDetailScreen
@@ -23,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -37,14 +40,38 @@ class MainActivity : ComponentActivity() {
                     Surface(color = MaterialTheme.colors.background) {
                         NavHost(navController = navController, startDestination = Route.HOME) {
                             composable(Route.HOME) {
-                                Home(navigate = navController::navigate)
+                                Home(
+                                    navigate = {
+                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                            key = Constants.ARTICLE,
+                                            value = it
+                                        )
+                                        navController.navigate(Route.DETAILS)
+                                    },
+                                    navigateScreen = navController::navigate
+                                )
                             }
                             composable(Route.DETAILS) {
-                                ArticleDetailScreen(posts = it.arguments?.get("post") as Post)
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Article>(
+                                    Constants.ARTICLE
+                                )?.let { it1 ->
+                                    ArticleDetailScreen(
+                                        article = it1
+                                    )
+                                }
                             }
 
                             composable(Route.SAVED) {
-                                SavedArticlesScreen()
+                                SavedArticlesScreen(
+                                    navigate = {
+                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                            key = Constants.ARTICLE,
+                                            value = it
+                                        )
+                                        navController.navigate(Route.DETAILS)
+                                    },
+                                    navigateUp = { navController.navigateUp() }
+                                )
                             }
 
                         }
