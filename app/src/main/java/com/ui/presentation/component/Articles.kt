@@ -41,7 +41,7 @@ fun Articles(
     val color: Color
 
     if (article.isSaved) {
-        imageId = painterResource(id = R.drawable.ic_saved)
+        imageId = painterResource(id = R.drawable.ic_saved_filled)
         color = colorResource(id = R.color.green)
 
     } else {
@@ -196,7 +196,11 @@ fun Articles(
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
-                    text = "Save",
+                    text = if (article.isSaved) {
+                        "Remove"
+                    } else {
+                        "Save"
+                    },
                     color = Color.White,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )

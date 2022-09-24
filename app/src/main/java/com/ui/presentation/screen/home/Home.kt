@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -21,12 +22,15 @@ import com.ui.util.UiEvent
 fun Home(
     navigate: (article: Article) -> Unit,
     navigateScreen: (UiEvent.Navigate) -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    scaffoldState: ScaffoldState
 ) {
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect {
             when (it) {
-                is UiEvent.ShowSnackBar -> {}
+                is UiEvent.ShowSnackBar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(it.message)
+                }
                 is UiEvent.Navigate -> {
                     navigateScreen(it)
                 }
@@ -55,7 +59,10 @@ fun Home(
         )
         Spacer(modifier = Modifier.size(20.dp))
         SearchBar(
-            modifier = Modifier.padding(horizontal = 25.dp)
+            modifier = Modifier.padding(horizontal = 25.dp),
+            onSearchClick = {
+                viewModel.onEvent(HomeScreenEvents.OnSearchEvent(it))
+            }
 
         )
         LazyColumn(modifier = Modifier.padding(horizontal = 25.dp)) {

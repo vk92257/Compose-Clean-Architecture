@@ -26,11 +26,14 @@ import com.ui.R
 @Composable
 fun ReporterDetails(
     modifier: Modifier = Modifier,
+    isSaved: Boolean = false,
     reporterName: String = "James Adams",
     mediaGroup: String = "Loren Correspondent",
     onSaveClick: () -> Unit = {},
     reporterImage: String = ""
 ) {
+
+
     Row(
         modifier = modifier
             .fillMaxWidth(),
@@ -58,7 +61,7 @@ fun ReporterDetails(
 
             Column {
                 Text(
-                    text = reporterName.takeLast(40)?:" ",
+                    text = reporterName.takeLast(40) ?: " ",
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(
                         start = 12.dp,
@@ -94,7 +97,11 @@ fun ReporterDetails(
             shape = RoundedCornerShape(10.dp)
         ) {
             Text(
-                text = "Save",
+                text = if (isSaved) {
+                    "Remove"
+                } else {
+                    "Save"
+                },
                 color = Color.White,
                 modifier = Modifier.padding(horizontal = 20.dp)
             )

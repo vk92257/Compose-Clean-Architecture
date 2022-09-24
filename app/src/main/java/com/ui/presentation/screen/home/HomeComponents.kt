@@ -28,7 +28,7 @@ fun HomeHeader(
         modifier = modifier
             .fillMaxWidth(),
 
-    ) {
+        ) {
         Icon(
             painter = painterResource(id = R.drawable.text), contentDescription = "newsBreeza21",
             modifier = Modifier.align(
@@ -73,7 +73,7 @@ fun SearchBar(
     val leadingIconView = @Composable {
         IconButton(
             onClick = {
-                onSearchClick(state)
+
             },
         ) {
             Icon(
@@ -108,6 +108,7 @@ fun SearchBar(
 
         onValueChange = {
             state = it
+            onSearchClick(state)
         },
         modifier = modifier
             .fillMaxWidth()

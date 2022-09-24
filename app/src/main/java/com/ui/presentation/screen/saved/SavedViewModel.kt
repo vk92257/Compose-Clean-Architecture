@@ -1,9 +1,6 @@
 package com.ui.presentation.screen.saved
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ui.data.data.dto.newBreeze.Article
@@ -33,9 +30,11 @@ class SavedViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             newBreezeCache.getArticle().collectLatest {
-                state = state.copy(articles = mutableStateListOf<Article>().apply {
+                val list = mutableStateListOf<Article>().apply {
                     addAll(it)
-                })
+                }
+                state = state.copy(articles = list)
+                state.articlesTemp = list
             }
         }
 
@@ -45,7 +44,14 @@ class SavedViewModel @Inject constructor(
         when (action) {
 
             is SavedScreenEvents.OnSearchEvent -> {
-                state = state.copy(searchQuery = action.text)
+                state.articlesTemp.filter { article ->
+                    article.title.contains(action.text, true) || article.description?.contains(
+                        action.text,
+                        true
+                    ) ?: false
+                }.let {
+                    state = state.copy(articles = it.toMutableStateList())
+                }
             }
             is SavedScreenEvents.OnArticleReadEvent -> {
                 viewModelScope.launch {

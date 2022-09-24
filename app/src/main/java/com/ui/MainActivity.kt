@@ -48,7 +48,8 @@ class MainActivity : ComponentActivity() {
                                         )
                                         navController.navigate(Route.DETAILS)
                                     },
-                                    navigateScreen = navController::navigate
+                                    navigateScreen = navController::navigate,
+                                    scaffoldState = scaffoldState
                                 )
                             }
                             composable(Route.DETAILS) {
@@ -56,7 +57,9 @@ class MainActivity : ComponentActivity() {
                                     Constants.ARTICLE
                                 )?.let { it1 ->
                                     ArticleDetailScreen(
-                                        article = it1
+                                        article = it1,
+                                        scaffoldState = scaffoldState,
+                                        navigateUp = { navController.navigateUp() }
                                     )
                                 }
                             }
@@ -70,7 +73,8 @@ class MainActivity : ComponentActivity() {
                                         )
                                         navController.navigate(Route.DETAILS)
                                     },
-                                    navigateUp = { navController.navigateUp() }
+                                    navigateUp = { navController.navigateUp() },
+                                    scaffoldState = scaffoldState
                                 )
                             }
 

@@ -8,4 +8,6 @@ data class HomeState(
     val isLoading: Boolean = false,
     val searchQuery: String = "",
     var articles: SnapshotStateList<Article> = mutableStateListOf(),
-)
+    var articlesTemp: SnapshotStateList<Article> = mutableStateListOf(),
+
+    )

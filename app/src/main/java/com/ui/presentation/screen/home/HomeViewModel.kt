@@ -1,9 +1,6 @@
 package com.ui.presentation.screen.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ui.data.data.dto.newBreeze.Article
@@ -38,17 +35,21 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getBreakingNewsUseCase("us", "665f8083e45c4a2b936b2a5030686501").onSuccess {
+
+                val list = mutableStateListOf<Article>().apply {
+                    addAll(it.articles)
+                }
                 state = state.copy(
-                    articles = mutableStateListOf<Article>().apply {
-                        addAll(it.articles)
-                    }
+                    articles = list
                 )
+                state.articlesTemp = list
             }.onFailure {
-//                _UiEvent.send(UiEvent.ShowSnackBar(it.message.toString()))
                 newBreezeCache.getArticle().collectLatest {
-                    state = state.copy(articles = mutableStateListOf<Article>().apply {
+                    val list = mutableStateListOf<Article>().apply {
                         addAll(it)
-                    })
+                    }
+                    state = state.copy(articles = list)
+                    state.articlesTemp = list
                 }
             }
 
@@ -61,11 +62,17 @@ class HomeViewModel @Inject constructor(
                 viewModelScope.launch {
                     _UiEvent.send(UiEvent.Navigate(Route.SAVED))
                 }
-
             }
 
             is HomeScreenEvents.OnSearchEvent -> {
-                state = state.copy(searchQuery = action.text)
+                state.articlesTemp.filter { article ->
+                    article.title.contains(action.text, true) || article.description?.contains(
+                        action.text,
+                        true
+                    ) ?: false
+                }.let {
+                    state = state.copy(articles = it.toMutableStateList())
+                }
             }
             is HomeScreenEvents.OnArticleReadEvent -> {
                 viewModelScope.launch {
@@ -73,15 +80,20 @@ class HomeViewModel @Inject constructor(
                 }
             }
             is HomeScreenEvents.OnSaveArticleEvent -> {
-                val list = state.articles
+                val list = state.articles.toMutableStateList()
                 val article = list[action.articlePosition]
                 article.isSaved = !article.isSaved
                 list[action.articlePosition] = article
                 state = state.copy(articles = list)
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    if (article.isSaved) newBreezeCache.insertArticle(article)
-                    else newBreezeCache.deleteArticle(article.title ?: "")
+                    if (article.isSaved) {
+                        newBreezeCache.insertArticle(article)
+                        UiEvent.ShowSnackBar("Article Saved")
+                    } else {
+                        newBreezeCache.deleteArticle(article.title ?: "")
+                        UiEvent.ShowSnackBar("Article Removed ")
+                    }
                 }
 
             }

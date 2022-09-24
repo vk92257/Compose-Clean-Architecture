@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -20,8 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ui.data.data.dto.newBreeze.Article
-import com.ui.util.UiEvent
 import com.ui.presentation.screen.home.SearchBar
+import com.ui.util.UiEvent
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -30,12 +31,15 @@ fun SavedArticlesScreen(
     viewModel: SavedViewModel = hiltViewModel(),
     navigate: (Article) -> Unit,
     navigateUp: () -> Unit,
+    scaffoldState: ScaffoldState
 ) {
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collectLatest {
             viewModel.uiEvent.collect {
                 when (it) {
-                    is UiEvent.ShowSnackBar -> {}
+                    is UiEvent.ShowSnackBar -> {
+                        scaffoldState.snackbarHostState.showSnackbar(it.message)
+                    }
                     is UiEvent.ReadArticleClick -> {
                         navigate(it.article)
                     }
@@ -74,7 +78,10 @@ fun SavedArticlesScreen(
                 .shadow(
                     elevation = 3.dp,
                     shape = RoundedCornerShape(22.dp)
-                )
+                ),
+            onSearchClick = {
+                viewModel.onActionPerformed(SavedScreenEvents.OnSearchEvent(it))
+            }
         )
 
 
