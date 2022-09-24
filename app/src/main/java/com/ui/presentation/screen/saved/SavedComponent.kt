@@ -1,5 +1,7 @@
 package com.ui.presentation.screen.saved
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.ui.R
+import com.ui.common.toTime
 import com.ui.data.data.dto.newBreeze.Article
 
 
@@ -84,6 +87,7 @@ fun ListIte() {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SavedListItem(
     article: Article,
@@ -153,9 +157,11 @@ fun SavedListItem(
 
 
             Text(
-                text = "${article.publishedAt ?: " "}- ${article.author ?: " "}",
+                text = "${article.publishedAt?.toTime() ?: " "}- ${article.author ?: " "}",
                 style = MaterialTheme.typography.caption,
-                modifier = Modifier.padding(vertical = 3.dp).clickable(onClick = onItemClicked),
+                modifier = Modifier
+                    .padding(vertical = 3.dp)
+                    .clickable(onClick = onItemClicked),
                 fontWeight = FontWeight.Normal,
                 maxLines = 1,
                 color = colorResource(id = R.color.black).copy(
@@ -171,6 +177,40 @@ fun SavedListItem(
 }
 
 
+@Preview
+@Composable
+fun StickyHeader(date: String = "Today") {
+    Row(
+        modifier = Modifier
+            .background(
+                color = colorResource(
+                    id = R.color.background,
+                )
+            )
+            .fillMaxWidth()
+            .padding(
+                horizontal = 35.dp,
+                vertical = 5.dp
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = date.take(10),
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Normal
+        )
+
+
+        Text(
+            text = "See all..",
+            style = MaterialTheme.typography.body1,
+            color = colorResource(id = com.ui.R.color.green),
+            modifier = Modifier.align(
+                alignment = Alignment.Bottom
+            )
+        )
+    }
+}
 
 
 

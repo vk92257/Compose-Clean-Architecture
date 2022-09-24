@@ -1,5 +1,7 @@
 package com.ui.presentation.screen.detail
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,11 +28,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.ui.R
+import com.ui.common.toTime
 import com.ui.data.data.dto.newBreeze.Article
 import com.ui.util.UiEvent
 import kotlinx.coroutines.flow.collectLatest
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ArticleDetailScreen(
     article: Article, viewModel: DetailViewModel = hiltViewModel(),
@@ -161,7 +165,7 @@ fun ArticleDetailScreen(
                     ) {
 
                         Text(
-                            text = viewModel.state.articles.publishedAt ?: "",
+                            text = viewModel.state.articles.publishedAt?.toTime() ?: "",
                             style = MaterialTheme.typography.body2,
                             modifier = Modifier.padding(
                                 horizontal = 15.dp

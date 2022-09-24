@@ -9,5 +9,6 @@ data class SavedState(
     val searchQuery: String = "",
     var articles: SnapshotStateList<Article> = mutableStateListOf(),
     var articlesTemp: SnapshotStateList<Article> = mutableStateListOf(),
+    var groupedByDate: Map<String, List<Article>> = mapOf(),
 
     )

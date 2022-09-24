@@ -1,5 +1,7 @@
 package com.ui.presentation.screen.saved
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +13,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 /**
@@ -18,6 +21,7 @@ import javax.inject.Inject
  * @Date: 27/02/22
  */
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class SavedViewModel @Inject constructor(
     private val newBreezeCache: ArticleCacheUseCase
@@ -35,6 +39,20 @@ class SavedViewModel @Inject constructor(
                 }
                 state = state.copy(articles = list)
                 state.articlesTemp = list
+                state.groupedByDate = list.groupBy {/* Util.extractDate*/
+                    /* Util.getFormattedDate(
+                         smsTimeInMilis = LocalDate.parse(
+                             it.publishedAt?.take(10) ?: ""
+                         ).toEpochDay()
+
+                     )*/
+                    val time = LocalDate.parse(
+                        it.publishedAt?.take(10) ?: ""
+                    )
+                    "${time.dayOfMonth} ${time.month} ${time.year}"
+
+                }
+
             }
         }
 
@@ -49,8 +67,15 @@ class SavedViewModel @Inject constructor(
                         action.text,
                         true
                     ) ?: false
-                }.let {
+                }.let { it ->
                     state = state.copy(articles = it.toMutableStateList())
+                    state.groupedByDate = state.articles.groupBy {
+                        val time = LocalDate.parse(
+                            it.publishedAt?.take(10) ?: ""
+                        )
+                        "${time.dayOfMonth} ${time.month} ${time.year}"
+
+                    }
                 }
             }
             is SavedScreenEvents.OnArticleReadEvent -> {

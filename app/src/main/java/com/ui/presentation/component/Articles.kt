@@ -1,5 +1,7 @@
 package com.ui.presentation.component
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.ui.R
+import com.ui.common.toTime
 import com.ui.data.data.dto.newBreeze.Article
 
 /**
@@ -29,6 +32,7 @@ import com.ui.data.data.dto.newBreeze.Article
  * @Date: 26/02/22
  */
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Articles(
     article: Article,
@@ -149,7 +153,7 @@ fun Articles(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = article.publishedAt ?: "",
+            text = article.publishedAt?.toTime() ?: "",
             style = MaterialTheme.typography.body2,
             modifier = Modifier.padding(
                 start = 12.dp,
