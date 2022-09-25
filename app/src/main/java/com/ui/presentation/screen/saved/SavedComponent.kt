@@ -76,6 +76,7 @@ fun Toolbar(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun ListIte() {
@@ -190,7 +191,7 @@ fun StickyHeader(date: String = "Today") {
             .fillMaxWidth()
             .padding(
                 horizontal = 35.dp,
-                vertical = 5.dp
+                vertical = 10.dp
             ),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -201,14 +202,14 @@ fun StickyHeader(date: String = "Today") {
         )
 
 
-        Text(
+        /*Text(
             text = "See all..",
             style = MaterialTheme.typography.body1,
             color = colorResource(id = com.ui.R.color.green),
             modifier = Modifier.align(
                 alignment = Alignment.Bottom
             )
-        )
+        )*/
     }
 }
 
