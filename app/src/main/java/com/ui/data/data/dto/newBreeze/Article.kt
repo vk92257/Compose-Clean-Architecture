@@ -4,9 +4,7 @@ import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.ui.common.toTime
 import kotlinx.android.parcel.Parcelize
-
 @Parcelize
 @Entity
 data class Article(

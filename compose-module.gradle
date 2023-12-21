@@ -1,0 +1,99 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'dagger.hilt.android.plugin'
+
+
+
+
+android {
+    compileSdk ProjectConfig.compileSdk
+
+    defaultConfig {
+        minSdk ProjectConfig.minSdk
+        targetSdk ProjectConfig.targetSdk
+        versionCode ProjectConfig.versionCode
+        versionName ProjectConfig.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion Compose.Compose
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation Compose.compiler
+    implementation Compose.ComposeFoundation
+    implementation Compose.ComposeUI
+    implementation Compose.ComposeUiToolingPreview
+    implementation Compose.HiltNavigationCompose
+    implementation Compose.ComposeMaterial
+    implementation Compose.runtime
+    implementation Compose.navigation
+    implementation Compose.ComposeNavigation
+    implementation Compose.viewModelCompose
+    implementation Compose.ComposeActivityCompose
+    implementation Compose.Annotation
+
+
+    debugImplementation Compose.ComposeTooling
+
+    kapt DaggerHilt.HiltAndroidCompiler
+    implementation DaggerHilt.HiltAndroid
+
+    testImplementation Testing.junit4
+    testImplementation Testing.junitAndroidExt
+    testImplementation Testing.truth
+    testImplementation Testing.coroutines
+    testImplementation Testing.turbine
+    testImplementation Testing.INSTANCE.composeUiTest
+    testImplementation Testing.mockk
+    testImplementation Testing.mockWebServer
+
+    androidTestImplementation Testing.junit4
+    androidTestImplementation Testing.junitAndroidExt
+    androidTestImplementation Testing.truth
+    androidTestImplementation Testing.coroutines
+    androidTestImplementation Testing.turbine
+    androidTestImplementation Testing.INSTANCE.composeUiTest
+    androidTestImplementation Testing.mockk
+    androidTestImplementation Testing.mockWebServer
+    androidTestImplementation Testing.HiltTesting
+
+
+    implementation ConstraintLayout.ConstraintLayout
+    implementation   AndroidX.appCompat
+    implementation   AndroidX.material
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt Room.RoomCompiler
+    implementation Room.RoomKTX
+
+    implementation Room.RoomRuntime
+    annotationProcessor Room.RoomCompiler
+
+
+}
